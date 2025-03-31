@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
+  <!-- Texto principal com fonte Tauri -->
+  <text x="200" y="48" font-family="Tauri, sans-serif" font-size="36" font-weight="normal" text-anchor="middle" fill="#ffffff" letter-spacing="2">DESENVOLVER</text>
+  
+  <!-- Texto secundário -->
+  <text x="200" y="78" font-family="Arial, sans-serif" font-size="18" font-weight="300" text-anchor="middle" fill="#ffffff" letter-spacing="4">COWORKING</text>
+  
+  <!-- Elemento decorativo moderno -->
+  <line x1="100" y1="55" x2="300" y2="55" stroke="#ffffff" stroke-width="1" opacity="0.9"/>
+  <circle cx="100" cy="55" r="2" fill="#ffffff" opacity="0.9"/>
+  <circle cx="300" cy="55" r="2" fill="#ffffff" opacity="0.9"/>
+</svg>
