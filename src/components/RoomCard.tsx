@@ -15,19 +15,42 @@ import { Calendar } from 'lucide-react';
 
 interface RoomCardProps {
   room: Room;
-  isAdmin?: boolean;
 }
 
-const RoomCard: React.FC<RoomCardProps> = ({ room, isAdmin = false }) => {
+const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
   const theme = useTheme();
 
-  // Adjust the link path based on whether we're in admin mode
-  const linkPath = isAdmin ? `/admin/room/${room.id}` : `/rooms/${room.id}`;
-
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardActionArea component={Link} to={linkPath} sx={{ flexGrow: 1 }}>
-        <Box sx={{ position: 'relative', paddingTop: '56.25%' /* 16:9 aspect ratio */ }}>
+    <Card 
+      sx={{ 
+        height: '100%', 
+        display: 'flex', 
+        flexDirection: 'column',
+        '& .MuiCardActionArea-root': {
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch'
+        }
+      }}
+      elevation={2}
+    >
+      <CardActionArea 
+        component={Link} 
+        to={`/rooms/${room.id}`}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}
+      >
+        {/* Image container with reduced height */}
+        <Box sx={{ 
+          width: '100%',
+          height: 180, // Reduced from 240px to 180px
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
           <CardMedia
             component="img"
             image={room.imageUrl}
@@ -39,18 +62,30 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, isAdmin = false }) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              objectPosition: 'center',
             }}
           />
         </Box>
-        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+
+        <CardContent 
+          sx={{ 
+            flexGrow: 1, 
+            display: 'flex', 
+            flexDirection: 'column',
+            p: 2.5, // Reduced padding
+            gap: 1.5, // Reduced gap
+            height: 220, // Reduced from 300px to 220px
+            overflow: 'auto'
+          }}
+        >
           <Typography 
             variant="h6" 
-            component="h3" 
-            gutterBottom
+            component="h3"
             sx={{ 
-              fontSize: '1.25rem',
+              fontSize: '1.125rem', // Slightly smaller font
               fontWeight: 600,
-              mb: 2
+              lineHeight: 1.2,
+              mb: 1
             }}
           >
             {room.name}
@@ -60,19 +95,20 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, isAdmin = false }) => {
             variant="body2" 
             color="text.secondary" 
             sx={{
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              mb: 2,
               flexGrow: 1,
-              lineHeight: 1.6
+              lineHeight: 1.5,
+              mb: 1.5
             }}
           >
             {room.description}
           </Typography>
           
-          <Box sx={{ mt: 'auto', pt: 2, borderTop: 1, borderColor: 'divider' }}>
+          <Box sx={{ 
+            pt: 1.5,
+            borderTop: 1, 
+            borderColor: 'divider',
+            marginTop: 'auto'
+          }}>
             <Chip
               icon={<Calendar size={16} />}
               label="Ver disponibilidade"

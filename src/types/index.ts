@@ -1,3 +1,10 @@
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+};
+
 export type Room = {
   id: string;
   name: string;
@@ -9,6 +16,8 @@ export type Room = {
 
 export type Booking = {
   id: string;
+  userEmail: string;
+  userPhone?: string;
   status: 'criado' | 'concluido' | 'cancelado';
   roomId: string;
   startTime: string;

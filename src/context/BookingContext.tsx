@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Booking, Room } from '../types';
 import { supabase } from '../lib/supabase';
 
@@ -13,6 +13,7 @@ interface BookingContextType {
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
+// Default coworking space image from Unsplash
 const DEFAULT_ROOM_IMAGE = '/default-room.avif';
 
 export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -20,7 +21,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('salas_coworking')
@@ -39,7 +40,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           code: room.codigo,
           description: room.descricao || '',
           createdAt: room.data_criacao,
-          imageUrl: room.imagem_url || DEFAULT_ROOM_IMAGE
+          imageUrl: room.imagem_url || DEFAULT_ROOM_IMAGE // Use default image if none provided
         }));
         
         setRooms(formattedRooms);
@@ -47,13 +48,13 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (error) {
       console.error('Error fetching rooms:', error);
     }
-  };
+  }, []);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('reservas_coworking')
-        .select('id, status, id_sala, data_inicio, data_fim, data_criacao')
+        .select('*')
         .order('data_inicio');
       
       if (error) {
@@ -64,6 +65,8 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (data) {
         const formattedBookings: Booking[] = data.map(booking => ({
           id: booking.id,
+          userEmail: booking.email_usuario,
+          userPhone: booking.telefone_usuario,
           status: booking.status,
           roomId: booking.id_sala,
           startTime: booking.data_inicio,
@@ -76,9 +79,9 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
-  };
+  }, []);
 
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
     setIsLoading(true);
     try {
       await Promise.all([fetchRooms(), fetchBookings()]);
@@ -87,11 +90,12 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [fetchRooms, fetchBookings]);
 
   useEffect(() => {
     refreshData();
     
+    // Set up real-time subscriptions
     const roomsSubscription = supabase
       .channel('rooms-changes')
       .on('postgres_changes', 
@@ -124,27 +128,27 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       supabase.removeChannel(roomsSubscription);
       supabase.removeChannel(bookingsSubscription);
     };
-  }, []);
+  }, [fetchRooms, fetchBookings, refreshData]);
 
-  const getBookingsByRoom = (roomId: string) => {
+  const getBookingsByRoom = useCallback((roomId: string) => {
     return bookings.filter(booking => booking.roomId === roomId);
-  };
+  }, [bookings]);
 
-  const getRoom = (roomId: string) => {
+  const getRoom = useCallback((roomId: string) => {
     return rooms.find(room => room.id === roomId);
-  };
+  }, [rooms]);
+
+  const contextValue = useMemo(() => ({
+    bookings,
+    rooms,
+    getBookingsByRoom,
+    getRoom,
+    isLoading,
+    refreshData
+  }), [bookings, rooms, getBookingsByRoom, getRoom, isLoading, refreshData]);
 
   return (
-    <BookingContext.Provider 
-      value={{ 
-        bookings, 
-        rooms, 
-        getBookingsByRoom,
-        getRoom,
-        isLoading,
-        refreshData
-      }}
-    >
+    <BookingContext.Provider value={contextValue}>
       {children}
     </BookingContext.Provider>
   );

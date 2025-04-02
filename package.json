@@ -1,5 +1,5 @@
 {
-  "name": "desenvolver-coworking-public",
+  "name": "desenvolver-coworking",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -12,13 +12,18 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.3.4",
     "@mui/material": "^5.15.14",
     "@supabase/supabase-js": "^2.39.7",
     "date-fns": "^3.3.1",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.22.3"
+    "react-helmet-async": "^2.0.4",
+    "react-hook-form": "^7.51.0",
+    "react-router-dom": "^6.22.3",
+    "swiper": "^11.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

@@ -35,56 +35,81 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     palette: {
       mode,
       primary: {
-        main: '#0f3c8c',
-        light: '#1e4faf',
-        dark: '#0f3c8c', // Using main color for dark to maintain consistency
-        contrastText: '#ffffff',
+        main: mode === 'light' ? '#7A68B3' : '#8E7BC8',
+        light: mode === 'light' ? '#9A8CC8' : '#A596D9',
+        dark: mode === 'light' ? '#5A4B8C' : '#6E5EA3',
+        contrastText: '#FFFFFF',
       },
       secondary: {
-        main: '#4f46e5',
-        light: '#818cf8',
-        dark: '#4338ca',
-        contrastText: '#ffffff',
-      },
-      background: {
-        default: mode === 'light' ? '#f8fafc' : '#0f172a',
-        paper: mode === 'light' ? '#ffffff' : '#1e293b',
-      },
-      text: {
-        primary: mode === 'light' ? '#1e293b' : '#f1f5f9',
-        secondary: mode === 'light' ? '#64748b' : '#94a3b8',
+        main: mode === 'light' ? '#E4567F' : '#FF6B9F',
+        light: mode === 'light' ? '#EC7B9B' : '#FF8DB5',
+        dark: mode === 'light' ? '#B43A61' : '#D9487E',
+        contrastText: '#FFFFFF',
       },
       error: {
-        main: '#ef4444',
-        light: '#fca5a5',
-        dark: '#dc2626',
+        main: '#FF8C42',
+        light: mode === 'light' ? '#FFA66B' : '#FFA573',
+        dark: mode === 'light' ? '#E67324' : '#E67E4D',
       },
       warning: {
-        main: '#f59e0b',
-        light: '#fcd34d',
-        dark: '#d97706',
+        main: '#FFD166',
+        light: mode === 'light' ? '#FFE08C' : '#FFE066',
+        dark: mode === 'light' ? '#E6B84D' : '#E6C84D',
       },
-      info: {
-        main: '#3b82f6',
-        light: '#93c5fd',
-        dark: '#2563eb',
+      background: {
+        default: mode === 'light' ? '#F9F8FC' : '#1A1724',
+        paper: mode === 'light' ? '#FFFFFF' : '#2C2638',
       },
-      success: {
-        main: '#10b981',
-        light: '#6ee7b7',
-        dark: '#059669',
+      text: {
+        primary: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+        secondary: mode === 'light' ? '#595667' : '#D8D5E2',
+      },
+      divider: mode === 'light' ? 'rgba(89, 86, 103, 0.12)' : 'rgba(216, 213, 226, 0.12)',
+      action: {
+        active: mode === 'light' ? '#7A68B3' : '#8E7BC8',
+        hover: mode === 'light' ? 'rgba(122, 104, 179, 0.08)' : 'rgba(142, 123, 200, 0.08)',
+        selected: mode === 'light' ? 'rgba(122, 104, 179, 0.16)' : 'rgba(142, 123, 200, 0.16)',
+        disabled: mode === 'light' ? 'rgba(89, 86, 103, 0.38)' : 'rgba(216, 213, 226, 0.38)',
+        disabledBackground: mode === 'light' ? 'rgba(89, 86, 103, 0.12)' : 'rgba(216, 213, 226, 0.12)',
       },
     },
     typography: {
       fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
       h1: {
         fontWeight: 700,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
       },
       h2: {
         fontWeight: 600,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
       },
       h3: {
         fontWeight: 600,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+      },
+      h4: {
+        fontWeight: 600,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+      },
+      h5: {
+        fontWeight: 600,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+      },
+      h6: {
+        fontWeight: 600,
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+      },
+      subtitle1: {
+        color: mode === 'light' ? '#595667' : '#D8D5E2',
+      },
+      subtitle2: {
+        color: mode === 'light' ? '#595667' : '#D8D5E2',
+      },
+      body1: {
+        color: mode === 'light' ? '#2D2A33' : '#FFFFFF',
+      },
+      body2: {
+        color: mode === 'light' ? '#595667' : '#D8D5E2',
       },
       button: {
         textTransform: 'none',
@@ -98,7 +123,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: '#0f3c8c', // Same color for both modes
+            backgroundColor: mode === 'light' ? '#7A68B3' : '#8E7BC8',
             boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
           },
         },
@@ -133,7 +158,31 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            backgroundColor: '#0f3c8c', // Same color for both modes
+            backgroundColor: mode === 'light' ? '#7A68B3' : '#8E7BC8',
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            backgroundColor: mode === 'light' ? '#F9F8FC' : '#2C2638',
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            borderColor: mode === 'light' ? 'rgba(89, 86, 103, 0.12)' : 'rgba(216, 213, 226, 0.12)',
+          },
+          head: {
+            backgroundColor: mode === 'light' ? '#F9F8FC' : '#2C2638',
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: 'none',
           },
         },
       },

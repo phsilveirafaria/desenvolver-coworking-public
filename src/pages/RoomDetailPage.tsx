@@ -9,15 +9,15 @@ import {
   Button, 
   Box, 
   Container, 
-  Grid, 
   Card, 
-  CardMedia, 
   CardContent,
   IconButton,
   Paper,
+  Grid,
   useTheme
 } from '@mui/material';
-import { Users, MapPin, RefreshCw } from 'lucide-react';
+import { RefreshCw, ArrowLeft } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const RoomDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,106 +36,153 @@ const RoomDetailPage: React.FC = () => {
   
   if (!room) {
     return (
-      <Layout>
-        <Container maxWidth="md" sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Sala não encontrada
-          </Typography>
-          <Button 
-            onClick={() => navigate('/rooms')}
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-          >
-            Voltar para salas
-          </Button>
-        </Container>
-      </Layout>
+      <>
+        <Helmet>
+          <title>Sala não encontrada - Desenvolver Coworking</title>
+        </Helmet>
+        <Layout>
+          <Container maxWidth="md" sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Sala não encontrada
+            </Typography>
+            <Button 
+              onClick={() => navigate('/rooms')}
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              Voltar para salas
+            </Button>
+          </Container>
+        </Layout>
+      </>
     );
   }
   
   return (
-    <Layout>
-      <Container maxWidth="lg">
-        <Card sx={{ mb: 4, overflow: 'hidden' }} elevation={2}>
-          <Grid container>
-            <Grid item xs={12} md={6}>
-              <CardMedia
-                component="img"
-                sx={{ height: { xs: 240, md: '100%' }, objectFit: 'cover' }}
-                image={room.imageUrl}
-                alt={room.name}
-              />
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <CardContent sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
-                  {room.name}
-                </Typography>
-                
-                <Box sx={{ display: 'flex', mb: 3 }}>
-                  <MapPin size={20} style={{ marginRight: 8, marginTop: 4 }} />
-                  <Box>
-                    <Typography variant="subtitle1" fontWeight="medium">
-                      Localização
-                    </Typography>
-                    <Typography color="text.secondary">
-                      Desenvolver Coworking, 2º andar
-                    </Typography>
-                  </Box>
-                </Box>
-                
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
-                    Descrição
-                  </Typography>
-                  <Typography color="text.secondary">
-                    {room.description}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Grid>
-          </Grid>
-        </Card>
-        
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h5" component="h2" fontWeight="bold">
-              Disponibilidade
-            </Typography>
-            <IconButton 
-              onClick={handleRefresh}
-              disabled={refreshing || isLoading}
-              sx={{ 
-                mr: 1,
-                color: theme.palette.mode === 'dark' ? '#ffffff' : theme.palette.primary.main,
-                '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.08)',
-                }
-              }}
+    <>
+      <Helmet>
+        <title>{`${room.name} - Desenvolver Coworking`}</title>
+      </Helmet>
+      <Layout>
+        <Container maxWidth="lg">
+          {/* Room Header */}
+          <Box sx={{ mb: 4 }}>
+            <Button
+              startIcon={<ArrowLeft />}
+              onClick={() => navigate(-1)}
+              sx={{ mb: 2 }}
             >
-              {refreshing || isLoading ? (
-                <LoadingSpinner size="small" />
-              ) : (
-                <RefreshCw size={20} />
-              )}
-            </IconButton>
+              Voltar
+            </Button>
+            
+            <Card sx={{ overflow: 'hidden' }} elevation={2}>
+              <Grid container spacing={0}>
+                {/* Image Column - Fixed width and height */}
+                <Grid item xs={12} md={5} lg={4}>
+                  <Box sx={{ 
+                    width: '100%',
+                    height: { xs: 300, md: 400 }, // Fixed height
+                    position: 'relative'
+                  }}>
+                    <Box
+                      component="img"
+                      src={room.imageUrl}
+                      alt={room.name}
+                      sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center'
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                
+                {/* Content Column */}
+                <Grid item xs={12} md={7} lg={8}>
+                  <CardContent sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Typography 
+                      variant="h4" 
+                      component="h1" 
+                      sx={{ 
+                        fontWeight: 'bold',
+                        mb: 3
+                      }}
+                    >
+                      {room.name}
+                    </Typography>
+                    
+                    <Typography 
+                      variant="body1" 
+                      color="text.secondary"
+                      sx={{ 
+                        lineHeight: 1.7,
+                        flex: 1
+                      }}
+                    >
+                      {room.description}
+                    </Typography>
+                  </CardContent>
+                </Grid>
+              </Grid>
+            </Card>
           </Box>
           
-          {isLoading ? (
-            <Card sx={{ p: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <LoadingSpinner size="large" />
-              <Typography sx={{ mt: 2, color: 'text.secondary' }}>
-                Carregando disponibilidade...
+          {/* Calendar Section */}
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              mb: 3 
+            }}>
+              <Typography variant="h5" component="h2" fontWeight="bold">
+                Disponibilidade
               </Typography>
-            </Card>
-          ) : (
-            <Calendar room={room} />
-          )}
-        </Box>
-      </Container>
-    </Layout>
+              <IconButton 
+                onClick={handleRefresh}
+                disabled={refreshing || isLoading}
+                sx={{ 
+                  color: theme.palette.mode === 'dark' ? '#ffffff' : theme.palette.primary.main,
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.08)',
+                  }
+                }}
+              >
+                {refreshing || isLoading ? (
+                  <LoadingSpinner size="small" />
+                ) : (
+                  <RefreshCw size={20} />
+                )}
+              </IconButton>
+            </Box>
+            
+            {isLoading ? (
+              <Card sx={{ 
+                p: 6, 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }}>
+                <LoadingSpinner size="large" />
+                <Typography sx={{ mt: 2, color: 'text.secondary' }}>
+                  Carregando disponibilidade...
+                </Typography>
+              </Card>
+            ) : (
+              <Paper elevation={2}>
+                <Calendar room={room} />
+              </Paper>
+            )}
+          </Box>
+        </Container>
+      </Layout>
+    </>
   );
 };
 

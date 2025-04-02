@@ -57,11 +57,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     >
       <Box
         component="img"
-        src="/desenvolver-coworking-logo.svg"
+        src="/desenvolver-coworking-logo.png"
         alt="Desenvolver Coworking"
         sx={{ 
-          height: size === 'large' ? '48px' : size === 'small' ? '28px' : '40px',
-          filter: mode === 'light' ? 'brightness(0) invert(1)' : 'brightness(0) invert(1)',
+          height: size === 'large' ? '56px' : size === 'small' ? '32px' : '48px',
         }}
       />
     </Link>
@@ -132,7 +131,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         <Box onClick={toggleDrawer} sx={{ width: 250 }}>
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <BrandLogo />
+            <BrandLogo size="large" />
           </Box>
           <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
           <List>
@@ -196,14 +195,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Container>
           <Box 
             component="img"
-            src="/desenvolver-coworking-logo.svg"
+            src={mode === 'light' ? '/desenvolver-coworking-logo.png' : '/desenvolver-coworking-logo-dark.png'}
             alt="Desenvolver Coworking"
             sx={{ 
-              height: '48px',
+              height: '56px',
               display: 'block',
               margin: '0 auto',
               mb: 2,
-              filter: mode === 'light' ? 'brightness(0)' : 'brightness(0) invert(0.7)',
               opacity: 0.7
             }}
           />

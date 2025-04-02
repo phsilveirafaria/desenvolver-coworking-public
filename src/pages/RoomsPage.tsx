@@ -5,7 +5,6 @@ import { useBooking } from '../context/BookingContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { 
   Typography, 
-  Button, 
   Box, 
   Container, 
   Grid, 
@@ -69,7 +68,7 @@ const RoomsPage: React.FC = () => {
           <Grid container spacing={3}>
             {rooms.map(room => (
               <Grid item key={room.id} xs={12} sm={6} md={4}>
-                <RoomCard room={room} isAdmin={true} />
+                <RoomCard room={room} />
               </Grid>
             ))}
           </Grid>
